@@ -72,7 +72,7 @@ class User extends CustomBaseEntity {
   comments: Comment[];
 
   @BeforeInsert()
-  setDescriptionText = async (): Promise<void> => {
+  setPassword = async (): Promise<void> => {
     if (this.password) {
       const salt = await bcrypt.genSalt(saltOrRounds);
       const crypted_password = await bcrypt.hash(this.password, salt);
