@@ -1,0 +1,175 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  password: String!
+  avatarUrl: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  project: Project!
+  projectId: Int
+  issues: [Issue!]!
+  comments: [Comment!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Project {
+  id: ID!
+  name: String!
+  url: String
+  description: String
+  category: ProjectCategory!
+  type: String
+  key: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  users: [User!]!
+  issues: [Issue!]!
+}
+
+enum ProjectCategory {
+  SOFTWARE
+  MARKETING
+  BUSINESS
+  MEDICAL
+  OTHER
+}
+
+type Issue {
+  id: ID!
+  title: String!
+  type: IssueType!
+  status: IssueStatus!
+  priority: IssuePriority!
+  listPosition: Float!
+  estimate: Int!
+  description: String
+  descriptionText: String
+  extimate: Int
+  timeSpent: Int
+  timeRemaining: Int
+  updatedAt: DateTime!
+  createdAt: DateTime!
+  reporterId: String!
+  projectId: Float!
+  users: [User!]!
+  comments: [Comment!]!
+  userIds: [ID!]!
+  project: Project!
+}
+
+"""Issue type"""
+enum IssueType {
+  TASK
+  BUG
+  STORY
+}
+
+"""Basic types of issue status"""
+enum IssueStatus {
+  BACKLOG
+  SELECTED
+  INPROGRESS
+  DONE
+}
+
+"""Issue priority type"""
+enum IssuePriority {
+  HIGHEST
+  HIGH
+  MEDIUM
+  LOW
+  LOWEST
+}
+
+type Comment {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userId: String!
+  issueId: Float!
+  user: User!
+  issue: Issue!
+}
+
+type JwtResponseType {
+  access_token: String!
+}
+
+type Query {
+  hello: String!
+  currentUser: User!
+  getProjectIssueList(status: IssueStatus, type: IssueType, priority: IssuePriority, reporterId: String, searchTerm: String): [Issue!]!
+  getIssuesWithUsersAndComments(issueId: Int!): Issue!
+  getProjectWithIssuesAndUsers: Project!
+  loginUser(password: String!, email: String!): JwtResponseType!
+}
+
+type Mutation {
+  creatUser(user: UserCreateInput!): User!
+  createIssue(issue: IssueCreateInput!): Issue!
+  updateIssue(issue: IssueUpdateInput!, id: Float!): Issue!
+  deleteIssue(id: Float!): Boolean!
+  createComment: Comment
+  updateComment: Comment!
+  deleteComment: Boolean!
+  updateProject(project: ProjectInput!): Project!
+  registerUser(user: UserCreateInput!): User!
+}
+
+input UserCreateInput {
+  name: String!
+  email: String!
+  avatarUrl: String = ""
+  projectId: Int
+  password: String
+}
+
+input IssueCreateInput {
+  title: String!
+  status: IssueStatus
+  type: IssueType!
+  priority: IssuePriority!
+  listPosition: Float!
+  reporterId: String!
+  projectId: ID!
+  users: [UserInput!]
+  userIds: [ID!]
+  description: String
+}
+
+input UserInput {
+  id: ID!
+  name: String
+  avatarUrl: String
+  projectId: Int
+}
+
+input IssueUpdateInput {
+  title: String
+  status: IssueStatus
+  type: IssueType
+  priority: IssuePriority
+  listPosition: Float
+  reporterId: String
+  projectId: ID
+  users: [UserInput!]
+  userIds: [ID!]
+  description: String
+}
+
+input ProjectInput {
+  name: String!
+  url: String
+  drescription: String
+  category: String
+}
